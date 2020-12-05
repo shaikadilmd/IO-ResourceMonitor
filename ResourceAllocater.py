@@ -1,3 +1,4 @@
+# Importing the Library files
 import psutil,sys
 import ast,csv
 import time
@@ -6,19 +7,19 @@ from threading import Thread
 import threading,schedule
 
 # Storing the command line arguments
-Process = sys.argv[1]
-Period = int(sys.argv[2])
-PollingFrequency = int(sys.argv[3])
-Switch = float(sys.argv[4])
-newCPUAffinity = sys.argv[5]
-maxMemoryLock = int(sys.argv[6])
-maxFileSize = int(sys.argv[7])
+Process = sys.argv[1]     #Name of process
+Period = int(sys.argv[2]) # A length of time (seconds) in which to monitor the processes
+PollingFrequency = int(sys.argv[3]) # Monitor resource every interval of PollingFrequency
+Switch = float(sys.argv[4]) 
+newCPUAffinity = sys.argv[5]  # New CPUAffinity to be assigned at Switch*Period interval
+maxMemoryLock = int(sys.argv[6]) # New maximum memory to be assigned at Switch*Period interval
+maxFileSize = int(sys.argv[7])  # New max filesize to be assigned at Switch*Period interval
 
 newCPUAffinity = ast.literal_eval(newCPUAffinity)
 
 pid=None
 
-# Getting specific process details from list of processes 
+# Getting process details(processID) from list of processes 
 for procNameId in psutil.process_iter():
     if procNameId.name() == Process:
         pid = procNameId.pid
@@ -41,33 +42,30 @@ softFsize, HardFsize = proc.rlimit(psutil.RLIMIT_FSIZE)
 print(int(Period*Switch))
 print('PID:',pid,'CPU Affinity:',cpuAff_curr,'MaxRAM:',hardMem,'maxFileSize',HardFsize)
 
-
+# Initially assigning new CPUAffinity, Memory and FileSize limits
 proc.cpu_affinity(newCPUAffinity)
 cpuAff_new = proc.cpu_affinity()
 proc.rlimit(psutil.RLIMIT_MEMLOCK, (maxMemoryLock,maxMemoryLock))
 proc.rlimit(psutil.RLIMIT_FSIZE, (maxFileSize,maxFileSize))
-print('renewed')
+
 newSoftMem, newHardMem = proc.rlimit(psutil.RLIMIT_MEMLOCK)
 newSoftFsize, newHardFsize = proc.rlimit(psutil.RLIMIT_FSIZE)
 
-
-
-    
-def job(proc,newCPUAffinity,maxMemoryLock,maxFileSize):
-	proc.cpu_affinity(newCPUAffinity)
+# Scheduling job to assign new CPUAffinity, Memory and FileSize limits every interval of  Switch*Period seconds
+def allotResources(proc,newCPUAffinity,maxMemoryLock,maxFileSize):
+        proc.cpu_affinity(newCPUAffinity)
         cpuAff_new = proc.cpu_affinity()
         proc.rlimit(psutil.RLIMIT_MEMLOCK, (maxMemoryLock,maxMemoryLock))
         proc.rlimit(psutil.RLIMIT_FSIZE, (maxFileSize,maxFileSize))
-	print('renewed')
         newSoftMem, newHardMem = proc.rlimit(psutil.RLIMIT_MEMLOCK)
         newSoftFsize, newHardFsize = proc.rlimit(psutil.RLIMIT_FSIZE)
 
         #print('PID:',pid,'CPU Affinity:',cpuAff_new,'newMaxRAM:',newHardMem,'newMaxFileSize:',newHardFsize)
-    
-    
-	
-		
-schedule.every(int(Switch*Period)).seconds.do(job,proc,newCPUAffinity,maxMemoryLock,maxFileSize)
+
+# Scheduling the job using schedule function    		
+schedule.every(int(Switch*Period)).seconds.do(allotResources,proc,newCPUAffinity,maxMemoryLock,maxFileSize)
+
+# Creating and Generating the csv report of Resource utilization by the process
 with open('resMonitor.csv', 'w') as file:
      writer = csv.writer(file)
      writer.writerow(["PID", "CPU Affinity", "MaxRAM","maxFileSize"])
@@ -80,8 +78,7 @@ with open('resMonitor.csv', 'w') as file:
     
      writer.writerow(["timestamp","CPU utilization(%)","memory utilization(%)","cumulative bytes read(MB)","cumulative bytes written(MB)"])
         
-     while(True):
-        print('hey') 	 
+     while(True):	 
     	now = datetime.now()		
         current_time = now.strftime("%H:%M:%S")
         io_counters = proc.io_counters() 
