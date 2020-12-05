@@ -43,17 +43,17 @@ For python3 environments...
 $ sudo apt-get install python3-matplotlib
 ```
 
-### Generating Monitoring Report and IO-plots
+### Generate Monitoring Report and IO-plots
 
 
 Open your Linux Terminal and run these commands.
 
-Command to generate Monitoring report in csv Format:
+#### Command to generate Monitoring report in csv format:
 ```sh
 $ python ResourceAllocater.py processName Period PollingFrequency Switch newCPUAffinity newMemoryLock newFileSizeLock  
 ```
 
-Example Command : 
+#### Example Command : 
 ```sh
 $ python ResourceAllocater.py firefox 60 3 0.5 [0] 2048 3000000
 ```
@@ -61,12 +61,12 @@ $ python ResourceAllocater.py firefox 60 3 0.5 [0] 2048 3000000
 In the command above, the process is allocated with new resources for every 60 * 05 = 30 seconds (Switch*Period) and resources are monitored every 3 seconds (PollingFrequency).
 The new RAM assigned is 2048 and maxFileSize is 3000000.
 
-Command to generate IO-Plots in PNG Format:
+#### Command to generate IO-Plots in PNG Format:
 ```sh
 $ python IO-Plots.py processName
 ```
 
-Example Command : 
+#### Example Command : 
 ```sh
 $ python IO-Plots.py firefox 
 ```
