@@ -23,7 +23,7 @@ Period ∗ Switch.
 # Requirements
 ---
 The Python scripts in this project can be implemented only on Linux Systems
-* Linux Environment ( can also be Virutal Machine )
+* Linux Environment ( can also be Virtual Machine )
 * Python 2.7 and higher
 * Psutil 1.0 or later
 * Matplotlibs
@@ -50,7 +50,7 @@ Open your Linux Terminal and run these commands.
 
 Command to generate Monitoring report in csv Format:
 ```sh
-$ python ResourceAllocater.py processName Period PollingFrequency Switch newCPUAffinity newMemoryLock new FileSizeLock  
+$ python ResourceAllocater.py processName Period PollingFrequency Switch newCPUAffinity newMemoryLock newFileSizeLock  
 ```
 
 Example Command : 
