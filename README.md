@@ -55,7 +55,7 @@ $ python ResourceAllocater.py processName Period PollingFrequency Switch newCPUA
 
 Example Command : 
 ```sh
-$ python resAllocate.py firefox 60 3 0.5 [0] 2048 3000000
+$ python ResourceAllocater.py firefox 60 3 0.5 [0] 2048 3000000
 ```
 
 In the command above, the process is allocated with new resources for every 60 * 05 = 30 seconds (Switch*Period) and resources are monitored every 3 seconds (PollingFrequency).
