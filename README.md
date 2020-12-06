@@ -59,7 +59,7 @@ $ python ResourceAllocater.py firefox 60 3 0.5 [0] 2048 3000000
 ```
 
 In the command above, the process is allocated with new resources for every 60 * 05 = 30 seconds (Switch*Period) and resources are monitored every 3 seconds (PollingFrequency).
-The new RAM assigned is 2048 and maxFileSize is 3000000.
+Here, newCPUAffinity [0] means that process will now run only on one CPU core. Usually there would 32 cores (0-31) on most systems. The new RAM assigned is 2048 and new maxFileSize is 3000000.
 
 #### Command to generate IO-Plots in PNG Format:
 ```sh
