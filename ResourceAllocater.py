@@ -86,20 +86,3 @@ with open('resMonitor.csv', 'w') as file:
         time.sleep(PollingFrequency)
         schedule.run_pending()    
      
-
-     	
-		
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
